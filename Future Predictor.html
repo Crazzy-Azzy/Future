@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Future Prediction Software</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: monospace;
+    background: black;
+    overflow: hidden;
+    color: #00ff00;
+}
+
+/* MATRIX */
+#matrix {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
+
+/* MAIN CARD */
+.card {
+    position: relative;
+    z-index: 2;
+    width: 360px;
+    margin: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.85);
+    border: 1px solid #00ff00;
+    padding: 20px;
+    text-align: center;
+}
+
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0;
+    font-family: monospace;
+}
+
+button {
+    background: #00ff00;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#log {
+    text-align: left;
+    font-size: 13px;
+    min-height: 120px;
+    white-space: pre-wrap;
+}
+
+/* FINAL SCREEN */
+#finalScreen {
+    position: fixed;
+    inset: 0;
+    background: black;
+    color: #00ff00;
+    display: none;
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+#finalScreen h1 {
+    font-size: 52px;
+    margin-bottom: 20px;
+}
+
+#finalScreen h2 {
+    font-size: 26px;
+    margin-bottom: 25px;
+}
+
+#finalScreen a {
+    color: #00ff00;
+    font-size: 18px;
+    text-decoration: underline;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="card">
+    <h2>☠ FUTURE PREDICTION AI</h2>
+
+    <input placeholder="Name">
+    <input placeholder="Location">
+    <input placeholder="Phone Number">
+
+    <button onclick="startHack()">INITIATE SCAN</button>
+
+    <pre id="log"></pre>
+</div>
+
+<div id="finalScreen">
+    <h1 id="finalDay"></h1>
+    <h2>😂😂 HAHAHAHA PRANKED 😂😂</h2>
+    <p>Pranked by <b>Azzy</b></p>
+    <a href="https://www.instagram.com/crazzy_azzy" target="_blank">
+        Follow on Instagram
+    </a>
+</div>
+
+<script>
+/* MATRIX EFFECT */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+const letters = "01";
+const fontSize = 14;
+const cols = canvas.width / fontSize;
+const drops = Array(Math.floor(cols)).fill(1);
+
+setInterval(() => {
+    ctx.fillStyle = "rgba(0,0,0,0.05)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = "#00ff00";
+    ctx.font = fontSize + "px monospace";
+    drops.forEach((y,i)=>{
+        const t = letters[Math.floor(Math.random()*letters.length)];
+        ctx.fillText(t, i*fontSize, y*fontSize);
+        if (y*fontSize > canvas.height && Math.random()>0.975) drops[i]=0;
+        drops[i]++;
+    });
+},50);
+
+/* SOUND */
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+function beep(freq=500){
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value=freq; o.start();
+    g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.08);
+    o.stop(audioCtx.currentTime+0.08);
+}
+
+/* TYPEWRITER */
+function typeLine(text, cb){
+    let i=0;
+    const log=document.getElementById("log");
+    const t=setInterval(()=>{
+        log.textContent+=text[i];
+        beep(400+Math.random()*300);
+        i++;
+        if(i===text.length){
+            clearInterval(t);
+            log.textContent+="\n";
+            if(cb) cb();
+        }
+    },30);
+}
+
+/* MAIN FLOW */
+function startHack(){
+    document.getElementById("log").textContent="";
+    const steps=[
+        "Connecting to WhatsApp servers...",
+        "Syncing Google activity logs...",
+        "Contacting NASA satellites...",
+        "Accessing Hogwarts magic archives...",
+        "Breaking space-time continuum...",
+        "Future calculation complete."
+    ];
+    let i=0;
+    function next(){
+        if(i<steps.length){
+            typeLine(">> "+steps[i], next);
+            i++;
+        } else {
+            setTimeout(showFinal,800);
+        }
+    }
+    next();
+}
+
+/* FINAL SCREEN */
+function showFinal(){
+    const d=new Date();
+    d.setDate(d.getDate()+1);
+    const days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    document.querySelector(".card").style.display="none";
+    canvas.style.display="none";
+
+    document.getElementById("finalDay").innerText =
+        "TOMORROW WILL BE " + days[d.getDay()].toUpperCase();
+
+    document.getElementById("finalScreen").style.display="flex";
+}
+</script>
+
+</body>
+</html>

@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Future Prediction Software</title>
 
 <style>
 body {
     margin: 0;
     height: 100vh;
-    font-family: monospace;
     background: black;
-    overflow: hidden;
+    font-family: monospace;
     color: #00ff00;
+    overflow: hidden;
+    touch-action: manipulation;
 }
 
-/* MATRIX */
+/* MATRIX CANVAS */
 #matrix {
     position: fixed;
     inset: 0;
@@ -25,7 +27,8 @@ body {
 .card {
     position: relative;
     z-index: 2;
-    width: 360px;
+    width: 90%;
+    max-width: 360px;
     margin: auto;
     top: 50%;
     transform: translateY(-50%);
@@ -37,16 +40,17 @@ body {
 
 input, button {
     width: 100%;
-    padding: 10px;
-    margin: 6px 0;
+    padding: 12px;
+    margin: 8px 0;
+    font-size: 16px;
     font-family: monospace;
 }
 
 button {
     background: #00ff00;
     border: none;
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
 }
 
 #log {
@@ -56,7 +60,7 @@ button {
     white-space: pre-wrap;
 }
 
-/* FINAL SCREEN */
+/* FINAL FULLSCREEN RESULT */
 #finalScreen {
     position: fixed;
     inset: 0;
@@ -68,15 +72,16 @@ button {
     align-items: center;
     flex-direction: column;
     text-align: center;
+    padding: 20px;
 }
 
 #finalScreen h1 {
-    font-size: 52px;
+    font-size: 44px;
     margin-bottom: 20px;
 }
 
 #finalScreen h2 {
-    font-size: 26px;
+    font-size: 22px;
     margin-bottom: 25px;
 }
 
@@ -108,42 +113,50 @@ button {
     <h1 id="finalDay"></h1>
     <h2>😂😂 HAHAHAHA PRANKED 😂😂</h2>
     <p>Pranked by <b>Azzy</b></p>
-    <a href="https://www.instagram.com/crazzy_azzy" target="_blank">
+    <a href="https://www.instagram.com/YOUR_INSTAGRAM_ID" target="_blank">
         Follow on Instagram
     </a>
 </div>
 
 <script>
-/* MATRIX EFFECT */
+/* MATRIX EFFECT (MOBILE SAFE) */
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
 const letters = "01";
 const fontSize = 14;
-const cols = canvas.width / fontSize;
-const drops = Array(Math.floor(cols)).fill(1);
+let columns = Math.floor(canvas.width / fontSize);
+let drops = Array(columns).fill(1);
 
 setInterval(() => {
     ctx.fillStyle = "rgba(0,0,0,0.05)";
     ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle = "#00ff00";
     ctx.font = fontSize + "px monospace";
+
     drops.forEach((y,i)=>{
-        const t = letters[Math.floor(Math.random()*letters.length)];
-        ctx.fillText(t, i*fontSize, y*fontSize);
-        if (y*fontSize > canvas.height && Math.random()>0.975) drops[i]=0;
+        const text = letters[Math.floor(Math.random()*letters.length)];
+        ctx.fillText(text, i*fontSize, y*fontSize);
+        if (y*fontSize > canvas.height && Math.random()>0.98) drops[i]=0;
         drops[i]++;
     });
-},50);
+}, window.innerWidth < 600 ? 90 : 50);
 
-/* SOUND */
+/* AUDIO (MOBILE UNLOCKED ON TAP) */
 const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
 function beep(freq=500){
-    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
     o.connect(g); g.connect(audioCtx.destination);
-    o.frequency.value=freq; o.start();
-    g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.08);
+    o.frequency.value=freq;
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.08);
     o.stop(audioCtx.currentTime+0.08);
 }
 
@@ -165,7 +178,9 @@ function typeLine(text, cb){
 
 /* MAIN FLOW */
 function startHack(){
+    audioCtx.resume(); // REQUIRED for mobile audio
     document.getElementById("log").textContent="";
+
     const steps=[
         "Connecting to WhatsApp servers...",
         "Syncing Google activity logs...",
@@ -174,6 +189,7 @@ function startHack(){
         "Breaking space-time continuum...",
         "Future calculation complete."
     ];
+
     let i=0;
     function next(){
         if(i<steps.length){
@@ -186,11 +202,12 @@ function startHack(){
     next();
 }
 
-/* FINAL SCREEN */
+/* FINAL FULLSCREEN RESULT */
 function showFinal(){
     const d=new Date();
     d.setDate(d.getDate()+1);
     const days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
     document.querySelector(".card").style.display="none";
     canvas.style.display="none";
 

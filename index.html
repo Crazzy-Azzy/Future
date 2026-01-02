@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Future AI Scan</title>
+<title>Future AI Scanner</title>
 
 <style>
 * {
@@ -33,17 +33,18 @@ h1 {
 
 input {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
+  padding: 14px;
+  margin: 12px 0;
   background: black;
   border: 1px solid #00ff00;
   color: #00ff00;
+  font-size: 1rem;
 }
 
 .btn {
   width: 100%;
-  padding: 15px;
-  margin-top: 15px;
+  padding: 16px;
+  margin-top: 20px;
   border: 1px solid #00ff00;
   background: black;
   color: #00ff00;
@@ -57,40 +58,41 @@ input {
 }
 
 #terminal {
-  margin-top: 30px;
   display: none;
+  margin-top: 30px;
 }
 
 .line {
-  margin: 8px 0;
-  animation: flicker 0.1s infinite alternate;
-}
-
-@keyframes flicker {
-  from { opacity: 0.8; }
-  to { opacity: 1; }
+  margin: 12px 0;
 }
 
 .final {
-  text-align: center;
-  margin-top: 40px;
   display: none;
+  text-align: center;
+  margin-top: 50px;
 }
 
 .final h2 {
   font-size: 2.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 35px;
+  letter-spacing: 2px;
 }
 
 .burn {
   color: red;
-  text-shadow: 0 0 10px red;
-  margin-top: 10px;
+  text-shadow: 0 0 15px red;
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.prank {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
 }
 
 .credit {
-  margin-top: 15px;
   opacity: 0.8;
+  margin-bottom: 35px;
 }
 </style>
 </head>
@@ -101,9 +103,9 @@ input {
 <h1>AI FUTURE SCANNER</h1>
 
 <div id="form">
-  <input type="text" id="name" placeholder="Enter your name">
-  <input type="text" id="location" placeholder="Enter your location">
-  <input type="text" id="phone" placeholder="Enter your phone number">
+  <input id="name" placeholder="Enter your name">
+  <input id="location" placeholder="Enter your location">
+  <input id="phone" placeholder="Enter your phone number">
   <button class="btn" onclick="startScan()">SUBMIT</button>
 </div>
 
@@ -112,7 +114,8 @@ input {
 <div class="final" id="final">
   <h2 id="futureText"></h2>
   <div class="burn" id="burnName"></div>
-  <div class="credit">😂😂 HAHAHAHA PRANKED 😂😂</div>
+  <div class="prank">😂😂 HAHAHAHA PRANKED 😂😂</div>
+  <div class="credit">Pranked by Azzy</div>
 
   <button class="btn" onclick="shareWhatsApp()">SHARE ON WHATSAPP</button>
 
@@ -121,17 +124,23 @@ input {
   </a>
 </div>
 
+<audio id="modem" loop preload="auto">
+  <source src="https://www.soundjay.com/mechanical/sounds/modem-dial-1.mp3" type="audio/mpeg">
+</audio>
+
 </div>
 
 <script>
-function vibrate() {
-  if (navigator.vibrate) navigator.vibrate(150);
+const terminal = document.getElementById("terminal");
+const modem = document.getElementById("modem");
+
+function vibrate(ms = 150) {
+  if ("vibrate" in navigator) navigator.vibrate(ms);
 }
 
 function getTomorrowDay() {
   const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  const d = new Date();
-  return days[(d.getDay()+1)%7];
+  return days[(new Date().getDay() + 1) % 7];
 }
 
 function addLine(text, delay) {
@@ -141,7 +150,7 @@ function addLine(text, delay) {
       div.className = "line";
       div.textContent = text;
       terminal.appendChild(div);
-      window.scrollTo(0, document.body.scrollHeight);
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
       vibrate();
       resolve();
     }, delay);
@@ -156,7 +165,9 @@ async function startScan() {
   document.getElementById("form").style.display = "none";
   terminal.style.display = "block";
 
-  await addLine("Initializing AI core...", 800);
+  try { modem.play(); } catch(e) {}
+
+  await addLine("Initializing AI core...", 700);
   await addLine("Connecting to satellites...", 900);
   await addLine(`Tracking location: ${location}`, 900);
   await addLine("IP address traced ✔", 800);
@@ -169,6 +180,9 @@ async function startScan() {
   await addLine("Analyzing future timeline...", 1200);
   await addLine("FINAL RESULT READY", 1200);
 
+  modem.pause();
+  modem.currentTime = 0;
+
   showFinal(name);
 }
 
@@ -176,18 +190,20 @@ function showFinal(name) {
   terminal.style.display = "none";
   document.getElementById("final").style.display = "block";
 
-  const tomorrow = getTomorrowDay();
   document.getElementById("futureText").innerText =
-    `TOMORROW WILL BE ${tomorrow.toUpperCase()}`;
+    `TOMORROW WILL BE ${getTomorrowDay().toUpperCase()}`;
 
   document.getElementById("burnName").innerText =
-    `SUBJECT: ${name.toUpperCase()}`;
+    `SUBJECT IDENTIFIED: ${name.toUpperCase()}`;
 
-  vibrate();
+  vibrate(300);
 }
 
 function shareWhatsApp() {
-  const msg = `I just checked my future by this AI tool. Try this yourself:\nhttps://crazzy-azzy.github.io/Future/`;
+  const msg =
+`I just checked my future by this AI tool. Try this yourself:
+https://crazzy-azzy.github.io/Future/`;
+
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
 }
 </script>

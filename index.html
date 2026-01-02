@@ -6,80 +6,30 @@
 <title>Future Prediction Software</title>
 
 <style>
-body {
-    margin: 0;
-    height: 100vh;
-    background: black;
-    font-family: monospace;
-    color: #00ff00;
-    overflow: hidden;
-    touch-action: manipulation;
+body{margin:0;height:100vh;background:black;font-family:monospace;color:#00ff00;overflow:hidden}
+#matrix{position:fixed;inset:0}
+.card{position:relative;z-index:2;width:90%;max-width:360px;margin:auto;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.9);border:1px solid #0f0;padding:20px;text-align:center}
+input,button{width:100%;padding:12px;margin:8px 0;font-size:16px;font-family:monospace}
+button{background:#0f0;border:none;font-weight:bold;cursor:pointer}
+#log{text-align:left;font-size:13px;min-height:120px;white-space:pre-wrap}
+
+#countdown{
+position:fixed;inset:0;display:none;z-index:5000;
+justify-content:center;align-items:center;
+font-size:120px;font-weight:bold;background:black;
 }
-#matrix {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
+
+#finalScreen{
+position:fixed;inset:0;background:black;color:#0f0;
+display:none;z-index:9999;
+justify-content:center;align-items:center;
+flex-direction:column;text-align:center;padding:20px
 }
-.card {
-    position: relative;
-    z-index: 2;
-    width: 90%;
-    max-width: 360px;
-    margin: auto;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.85);
-    border: 1px solid #00ff00;
-    padding: 20px;
-    text-align: center;
-}
-input, button {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    font-size: 16px;
-    font-family: monospace;
-}
-button {
-    background: #00ff00;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-}
-#log {
-    text-align: left;
-    font-size: 13px;
-    min-height: 120px;
-    white-space: pre-wrap;
-}
-#finalScreen {
-    position: fixed;
-    inset: 0;
-    background: black;
-    color: #00ff00;
-    display: none;
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    padding: 20px;
-}
-#finalScreen h1 {
-    font-size: 42px;
-    margin-bottom: 15px;
-}
-#finalScreen h2 {
-    font-size: 22px;
-    margin-bottom: 20px;
-}
-#finalScreen p {
-    font-size: 16px;
-}
-#finalScreen a {
-    color: #00ff00;
-    font-size: 18px;
-    text-decoration: underline;
+#finalScreen h1{font-size:42px}
+#finalScreen h2{font-size:22px;margin-bottom:10px}
+#finalScreen a,#finalScreen button{
+color:#0f0;font-size:18px;margin-top:10px;
+background:none;border:1px solid #0f0;padding:10px;width:90%
 }
 </style>
 </head>
@@ -89,103 +39,126 @@ button {
 <canvas id="matrix"></canvas>
 
 <div class="card">
-    <h2>☠ FUTURE PREDICTION AI</h2>
-    <input id="victim" placeholder="Your Name">
-    <input placeholder="Location">
-    <input placeholder="Phone Number">
-    <button onclick="startHack()">INITIATE SCAN</button>
-    <pre id="log"></pre>
+<h2>☠ FUTURE PREDICTION AI</h2>
+<input id="victim" placeholder="Your Name">
+<input placeholder="Location">
+<input placeholder="Phone Number">
+<button onclick="startHack()">INITIATE SCAN</button>
+<pre id="log"></pre>
 </div>
 
+<div id="countdown">3</div>
+
 <div id="finalScreen">
-    <h1 id="finalDay"></h1>
-    <h2 id="finalName"></h2>
-    <p id="ipTrace"></p>
-    <p>😂😂 HAHAHAHA PRANKED 😂😂</p>
-    <p>Pranked by <b>Azzy</b></p>
-    <a href="https://www.instagram.com/crazzy_azzy" target="_blank">
-        Follow on Instagram
-    </a>
+<h1 id="finalDay"></h1>
+<h2 id="finalName"></h2>
+<p id="ipTrace"></p>
+<p>😂😂 HAHAHAHA PRANKED 😂😂</p>
+<p>Pranked by <b>Azzy</b></p>
+
+<button onclick="shareWhatsApp()">SHARE ON WHATSAPP</button>
+
+<a href="https://www.instagram.com/crazzy_azzy" target="_blank">
+Follow on Instagram
+</a>
 </div>
 
 <script>
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
-function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}
-window.addEventListener("resize",resizeCanvas);
-resizeCanvas();
-const letters="01";
-const fontSize=14;
-let cols=Math.floor(canvas.width/fontSize);
-let drops=Array(cols).fill(1);
+/* MATRIX */
+const c=document.getElementById("matrix"),x=c.getContext("2d");
+function r(){c.width=innerWidth;c.height=innerHeight}r();onresize=r;
+let f=14,d=Array(Math.floor(c.width/f)).fill(1);
 setInterval(()=>{
-    ctx.fillStyle="rgba(0,0,0,0.05)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle="#00ff00";
-    ctx.font=fontSize+"px monospace";
-    drops.forEach((y,i)=>{
-        ctx.fillText(letters[Math.random()*2|0],i*fontSize,y*fontSize);
-        if(y*fontSize>canvas.height&&Math.random()>0.98)drops[i]=0;
-        drops[i]++;
-    });
-},innerWidth<600?90:50);
+x.fillStyle="rgba(0,0,0,.05)";
+x.fillRect(0,0,c.width,c.height);
+x.fillStyle="#0f0";x.font=f+"px monospace";
+d.forEach((y,i)=>{
+x.fillText(Math.random()>0.5?"0":"1",i*f,y*f);
+if(y*f>c.height&&Math.random()>.98)d[i]=0;d[i]++;
+});
+},60);
 
-const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-function beep(f=500){
-    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-    o.connect(g);g.connect(audioCtx.destination);
-    o.frequency.value=f;o.start();
-    g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.08);
-    o.stop(audioCtx.currentTime+0.08);
+/* SOUND */
+const A=new(AudioContext||webkitAudioContext)();
+function beep(freq=500){
+const o=A.createOscillator(),g=A.createGain();
+o.connect(g);g.connect(A.destination);
+o.frequency.value=freq;o.start();
+g.gain.exponentialRampToValueAtTime(.0001,A.currentTime+.1);
+o.stop(A.currentTime+.1);
 }
 
-function typeLine(text,cb){
-    let i=0;
-    const log=document.getElementById("log");
-    const t=setInterval(()=>{
-        log.textContent+=text[i];
-        beep(400+Math.random()*300);
-        if(++i===text.length){
-            clearInterval(t);
-            log.textContent+="\n";
-            if(cb)cb();
-        }
-    },30);
+/* TYPE */
+function typeLine(t,n){
+let i=0,l=log;
+let T=setInterval(()=>{
+l.textContent+=t[i++];beep(400+Math.random()*300);
+if(i==t.length){clearInterval(T);l.textContent+="\n";n&&n()}
+},30);
 }
 
+/* START */
 function startHack(){
-    audioCtx.resume();
-    if(document.documentElement.requestFullscreen)
-        document.documentElement.requestFullscreen();
-    document.getElementById("log").textContent="";
-    const steps=[
-        "Connecting to WhatsApp servers...",
-        "Syncing Google activity...",
-        "Tracing IP address...",
-        "Contacting NASA satellites...",
-        "Accessing Hogwarts records...",
-        "Future locked..."
-    ];
-    let i=0;
-    (function next(){
-        i<steps.length?typeLine(">> "+steps[i++],next):setTimeout(showFinal,800);
-    })();
+A.resume();
+document.documentElement.requestFullscreen?.();
+log.textContent="";
+let S=[
+"Connecting to WhatsApp servers...",
+"Syncing Google data...",
+"Tracing IP address...",
+"Contacting NASA...",
+"Accessing Hogwarts...",
+"Future locked..."
+];
+let i=0;(function N(){
+i<S.length?typeLine(">> "+S[i++],N):setTimeout(startCountdown,500);
+})();
 }
 
+/* COUNTDOWN EXPLOSION */
+function startCountdown(){
+document.querySelector(".card").style.display="none";
+countdown.style.display="flex";
+let n=3;
+countdown.innerText=n;
+let C=setInterval(()=>{
+beep(200+n*200);
+n--;
+if(n>0){countdown.innerText=n;}
+else{
+clearInterval(C);
+countdown.innerText="💥";
+setTimeout(showFinal,600);
+}
+},1000);
+}
+
+/* FINAL */
 function showFinal(){
-    const name=document.getElementById("victim").value||"UNKNOWN HUMAN";
-    const d=new Date();d.setDate(d.getDate()+1);
-    const days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    document.querySelector(".card").style.display="none";
-    canvas.style.display="none";
-    document.getElementById("finalDay").innerText=
-        "TOMORROW WILL BE "+days[d.getDay()].toUpperCase();
-    document.getElementById("finalName").innerText=
-        "SUBJECT: "+name.toUpperCase();
-    document.getElementById("ipTrace").innerText=
-        "IP TRACE COMPLETE • LOCATION LOCKED";
-    document.getElementById("finalScreen").style.display="flex";
-    if(navigator.vibrate) navigator.vibrate([200,100,200,100,400]);
+countdown.style.display="none";
+c.style.display="none";
+
+let name=victim.value||"UNKNOWN HUMAN";
+let d=new Date();d.setDate(d.getDate()+1);
+let D=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+finalDay.innerText="TOMORROW WILL BE "+D[d.getDay()].toUpperCase();
+finalName.innerText="SUBJECT: "+name.toUpperCase();
+ipTrace.innerText="IP TRACE COMPLETE • LOCATION LOCKED";
+
+finalScreen.style.display="flex";
+navigator.vibrate?.([200,100,200,100,400]);
+}
+
+/* WHATSAPP SHARE */
+function shareWhatsApp(){
+let msg=encodeURIComponent(
+"😂 I just checked my future!\n"+
+finalDay.innerText+
+"\n\nTry this prank:\n"+
+location.href
+);
+window.open("https://wa.me/?text="+msg,"_blank");
 }
 </script>
 

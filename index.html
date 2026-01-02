@@ -1,161 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Future Prediction Software</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Future Reveal</title>
 
-<style>
-body{margin:0;height:100vh;background:black;font-family:monospace;color:#00ff00;overflow:hidden}
-#matrix{position:fixed;inset:0}
-.card{position:relative;z-index:2;width:90%;max-width:360px;margin:auto;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.9);border:1px solid #0f0;padding:20px;text-align:center}
-input,button{width:100%;padding:12px;margin:8px 0;font-size:16px;font-family:monospace}
-button{background:#0f0;border:none;font-weight:bold;cursor:pointer}
-#log{text-align:left;font-size:13px;min-height:120px;white-space:pre-wrap}
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Courier New", monospace;
+    }
 
-#countdown{
-position:fixed;inset:0;display:none;z-index:5000;
-justify-content:center;align-items:center;
-font-size:120px;font-weight:bold;background:black;
-}
+    body {
+      background: black;
+      color: #00ff00;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
 
-#finalScreen{
-position:fixed;inset:0;background:black;color:#0f0;
-display:none;z-index:9999;
-justify-content:center;align-items:center;
-flex-direction:column;text-align:center;padding:20px
-}
-#finalScreen h1{font-size:42px}
-#finalScreen h2{font-size:22px;margin-bottom:10px}
-#finalScreen button,#finalScreen a{
-color:#0f0;font-size:18px;margin-top:12px;
-background:none;border:1px solid #0f0;padding:12px;width:90%;max-width:320px
-}
-</style>
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 40px;
+      letter-spacing: 3px;
+    }
+
+    .text {
+      font-size: 1.2rem;
+      margin: 10px 0;
+    }
+
+    .prank {
+      margin-top: 20px;
+      font-size: 1.1rem;
+    }
+
+    .credit {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .btn {
+      width: 90%;
+      max-width: 500px;
+      border: 1px solid #00ff00;
+      padding: 18px;
+      margin-top: 25px;
+      text-decoration: none;
+      color: #00ff00;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #00ff00;
+      color: black;
+    }
+  </style>
 </head>
 
 <body>
 
-<canvas id="matrix"></canvas>
+  <h1>TOMORROW WILL BE SATURDAY</h1>
 
-<div class="card">
-<h2>☠ FUTURE PREDICTION AI</h2>
-<input id="victim" placeholder="Your Name">
-<input placeholder="Location">
-<input placeholder="Phone Number">
-<button onclick="startHack()">INITIATE SCAN</button>
-<pre id="log"></pre>
-</div>
+  <div class="text">SUBJECT: FDSA</div>
 
-<div id="countdown">3</div>
+  <div class="prank">😂😂 HAHAHAHA PRANKED 😂😂</div>
 
-<div id="finalScreen">
-<h1 id="finalDay"></h1>
-<h2 id="finalName"></h2>
-<p>😂😂 HAHAHAHA PRANKED 😂😂</p>
-<p>Pranked by <b>Azzy</b></p>
+  <div class="credit">Pranked by Azzy</div>
 
-<button onclick="shareWhatsApp()">SHARE ON WHATSAPP</button>
+  <a class="btn"
+     href="https://wa.me/?text=I%20just%20got%20pranked%20😂%20Check%20this%20out%20https://crazzy-azzy.github.io/Future/">
+     SHARE ON WHATSAPP
+  </a>
 
-<a href="https://www.instagram.com/crazzy_azzy" target="_blank">
-Follow on Instagram
-</a>
-</div>
-
-<script>
-/* MATRIX */
-const c=document.getElementById("matrix"),x=c.getContext("2d");
-function r(){c.width=innerWidth;c.height=innerHeight}r();onresize=r;
-let f=14,d=Array(Math.floor(c.width/f)).fill(1);
-setInterval(()=>{
-x.fillStyle="rgba(0,0,0,.05)";
-x.fillRect(0,0,c.width,c.height);
-x.fillStyle="#0f0";x.font=f+"px monospace";
-d.forEach((y,i)=>{
-x.fillText(Math.random()>0.5?"0":"1",i*f,y*f);
-if(y*f>c.height&&Math.random()>.98)d[i]=0;d[i]++;
-});
-},60);
-
-/* SOUND */
-const A=new(AudioContext||webkitAudioContext)();
-function beep(freq=500){
-const o=A.createOscillator(),g=A.createGain();
-o.connect(g);g.connect(A.destination);
-o.frequency.value=freq;o.start();
-g.gain.exponentialRampToValueAtTime(.0001,A.currentTime+.1);
-o.stop(A.currentTime+.1);
-}
-
-/* TYPE */
-function typeLine(t,n){
-let i=0,l=log;
-let T=setInterval(()=>{
-l.textContent+=t[i++];beep(400+Math.random()*300);
-if(i==t.length){clearInterval(T);l.textContent+="\n";n&&n()}
-},30);
-}
-
-/* START */
-function startHack(){
-A.resume();
-document.documentElement.requestFullscreen?.();
-log.textContent="";
-let S=[
-"Connecting to WhatsApp servers...",
-"Syncing Google data...",
-"Analyzing digital footprint...",
-"Contacting NASA...",
-"Accessing Hogwarts...",
-"Future locked..."
-];
-let i=0;(function N(){
-i<S.length?typeLine(">> "+S[i++],N):setTimeout(startCountdown,500);
-})();
-}
-
-/* COUNTDOWN */
-function startCountdown(){
-document.querySelector(".card").style.display="none";
-countdown.style.display="flex";
-let n=3;
-countdown.innerText=n;
-let C=setInterval(()=>{
-beep(200+n*200);
-n--;
-if(n>0){countdown.innerText=n;}
-else{
-clearInterval(C);
-countdown.innerText="💥";
-setTimeout(showFinal,600);
-}
-},1000);
-}
-
-/* FINAL */
-function showFinal(){
-countdown.style.display="none";
-c.style.display="none";
-let name=victim.value||"UNKNOWN HUMAN";
-let d=new Date();d.setDate(d.getDate()+1);
-let D=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-finalDay.innerText="TOMORROW WILL BE "+D[d.getDay()].toUpperCase();
-finalName.innerText="SUBJECT: "+name.toUpperCase();
-finalScreen.style.display="flex";
-navigator.vibrate?.([200,100,200,100,400]);
-}
-
-/* WHATSAPP SHARE */
-function shareWhatsApp(){
-const msg=encodeURIComponent(
-"😂 I just checked my future!\n"+
-finalDay.innerText+
-"\n\nTry this prank:\n"+
-location.href
-);
-location.href="https://wa.me/?text="+msg;
-}
-</script>
+  <a class="btn"
+     href="https://www.instagram.com/crazzy_azzy"
+     target="_blank">
+     Follow on Instagram
+  </a>
 
 </body>
 </html>

@@ -15,15 +15,11 @@ body {
     overflow: hidden;
     touch-action: manipulation;
 }
-
-/* MATRIX */
 #matrix {
     position: fixed;
     inset: 0;
     z-index: 0;
 }
-
-/* CARD */
 .card {
     position: relative;
     z-index: 2;
@@ -37,7 +33,6 @@ body {
     padding: 20px;
     text-align: center;
 }
-
 input, button {
     width: 100%;
     padding: 12px;
@@ -45,22 +40,18 @@ input, button {
     font-size: 16px;
     font-family: monospace;
 }
-
 button {
     background: #00ff00;
     border: none;
     font-weight: bold;
     cursor: pointer;
 }
-
 #log {
     text-align: left;
     font-size: 13px;
     min-height: 120px;
     white-space: pre-wrap;
 }
-
-/* FINAL SCREEN */
 #finalScreen {
     position: fixed;
     inset: 0;
@@ -74,27 +65,21 @@ button {
     text-align: center;
     padding: 20px;
 }
-
 #finalScreen h1 {
     font-size: 42px;
     margin-bottom: 15px;
 }
-
 #finalScreen h2 {
     font-size: 22px;
     margin-bottom: 20px;
 }
-
 #finalScreen p {
     font-size: 16px;
-    opacity: 0.9;
 }
-
 #finalScreen a {
     color: #00ff00;
     font-size: 18px;
     text-decoration: underline;
-    margin-top: 10px;
 }
 </style>
 </head>
@@ -105,13 +90,10 @@ button {
 
 <div class="card">
     <h2>☠ FUTURE PREDICTION AI</h2>
-
     <input id="victim" placeholder="Your Name">
     <input placeholder="Location">
     <input placeholder="Phone Number">
-
     <button onclick="startHack()">INITIATE SCAN</button>
-
     <pre id="log"></pre>
 </div>
 
@@ -127,121 +109,85 @@ button {
 </div>
 
 <script>
-/* MATRIX */
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
-
-function resizeCanvas() {
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-}
-window.addEventListener("resize", resizeCanvas);
+function resizeCanvas(){canvas.width=innerWidth;canvas.height=innerHeight;}
+window.addEventListener("resize",resizeCanvas);
 resizeCanvas();
-
-const letters = "01";
-const fontSize = 14;
-let cols = Math.floor(canvas.width / fontSize);
-let drops = Array(cols).fill(1);
-
-setInterval(() => {
-    ctx.fillStyle = "rgba(0,0,0,0.05)";
+const letters="01";
+const fontSize=14;
+let cols=Math.floor(canvas.width/fontSize);
+let drops=Array(cols).fill(1);
+setInterval(()=>{
+    ctx.fillStyle="rgba(0,0,0,0.05)";
     ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = "#00ff00";
-    ctx.font = fontSize + "px monospace";
+    ctx.fillStyle="#00ff00";
+    ctx.font=fontSize+"px monospace";
     drops.forEach((y,i)=>{
-        const t = letters[Math.floor(Math.random()*letters.length)];
-        ctx.fillText(t, i*fontSize, y*fontSize);
-        if (y*fontSize > canvas.height && Math.random()>0.98) drops[i]=0;
+        ctx.fillText(letters[Math.random()*2|0],i*fontSize,y*fontSize);
+        if(y*fontSize>canvas.height&&Math.random()>0.98)drops[i]=0;
         drops[i]++;
     });
-}, innerWidth < 600 ? 90 : 50);
+},innerWidth<600?90:50);
 
-/* AUDIO */
-const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-function beep(freq=500){
-    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.frequency.value=freq;
-    o.start();
+const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+function beep(f=500){
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.connect(g);g.connect(audioCtx.destination);
+    o.frequency.value=f;o.start();
     g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.08);
     o.stop(audioCtx.currentTime+0.08);
 }
 
-/* TYPEWRITER */
-function typeLine(text, cb){
+function typeLine(text,cb){
     let i=0;
     const log=document.getElementById("log");
     const t=setInterval(()=>{
         log.textContent+=text[i];
         beep(400+Math.random()*300);
-        i++;
-        if(i===text.length){
+        if(++i===text.length){
             clearInterval(t);
             log.textContent+="\n";
-            if(cb) cb();
+            if(cb)cb();
         }
     },30);
 }
 
-/* MAIN */
 function startHack(){
     audioCtx.resume();
-
-    if (document.documentElement.requestFullscreen) {
+    if(document.documentElement.requestFullscreen)
         document.documentElement.requestFullscreen();
-    }
-
     document.getElementById("log").textContent="";
-
     const steps=[
         "Connecting to WhatsApp servers...",
-        "Syncing Google activity logs...",
+        "Syncing Google activity...",
         "Tracing IP address...",
         "Contacting NASA satellites...",
-        "Accessing Hogwarts archives...",
-        "Locking future timeline..."
+        "Accessing Hogwarts records...",
+        "Future locked..."
     ];
-
     let i=0;
-    function next(){
-        if(i<steps.length){
-            typeLine(">> "+steps[i], next);
-            i++;
-        } else {
-            setTimeout(showFinal,800);
-        }
-    }
-    next();
+    (function next(){
+        i<steps.length?typeLine(">> "+steps[i++],next):setTimeout(showFinal,800);
+    })();
 }
 
-/* FINAL */
 function showFinal(){
-    const name = document.getElementById("victim").value || "UNKNOWN HUMAN";
-
-    const d=new Date();
-    d.setDate(d.getDate()+1);
+    const name=document.getElementById("victim").value||"UNKNOWN HUMAN";
+    const d=new Date();d.setDate(d.getDate()+1);
     const days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-
     document.querySelector(".card").style.display="none";
     canvas.style.display="none";
-
-    document.getElementById("finalDay").innerText =
-        "TOMORROW WILL BE " + days[d.getDay()].toUpperCase();
-
-    document.getElementById("finalName").innerText =
-        "SUBJECT: " + name.toUpperCase();
-
-    document.getElementById("ipTrace").innerText =
+    document.getElementById("finalDay").innerText=
+        "TOMORROW WILL BE "+days[d.getDay()].toUpperCase();
+    document.getElementById("finalName").innerText=
+        "SUBJECT: "+name.toUpperCase();
+    document.getElementById("ipTrace").innerText=
         "IP TRACE COMPLETE • LOCATION LOCKED";
-
     document.getElementById("finalScreen").style.display="flex";
-
-    if (navigator.vibrate) {
-        navigator.vibrate([200,100,200,100,400]);
-    }
+    if(navigator.vibrate) navigator.vibrate([200,100,200,100,400]);
 }
 </script>
 
 </body>
 </html>
-
